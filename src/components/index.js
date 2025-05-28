@@ -7,9 +7,6 @@ import Contact from "./Contact";
 import Team from "./Team";
 import Footer from "./Footer";
 import ChatInterface from "./ChatInterface";
-import Message from "./Message";
-import PromptExamples from "./PromptExamples";
-import TypingIndicator from "./TypingIndicator";
 
 export {
   Header,
@@ -21,7 +18,4 @@ export {
   Team,
   Footer,
   ChatInterface,
-  Message,
-  PromptExamples,
-  TypingIndicator,
 };
