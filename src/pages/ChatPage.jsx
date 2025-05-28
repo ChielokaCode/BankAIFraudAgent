@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ChatInterface } from "../components";
 
-function ChatPage() {
+const ChatPage = () => {
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1);
@@ -32,6 +32,6 @@ function ChatPage() {
       </main>
     </div>
   );
-}
+};
 
 export default ChatPage;
