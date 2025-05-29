@@ -18,7 +18,7 @@ const Homepage = () => {
         <Header />
         <Hero />
         <About />
-        <TrustedLogo />
+        {/* <TrustedLogo /> */}
         <Pricing />
         <Team />
         <Contact />

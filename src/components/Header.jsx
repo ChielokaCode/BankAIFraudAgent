@@ -44,20 +44,18 @@ const Header = () => {
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start -ml-20 sm:ml-0">
             {/* Logo and Text */}
             <div className="flex items-center">
-              {/* <img
-                src={PharmVerifyLogo}
+              <img
+                src="./img/SentinelAILogo.png"
                 className="xl:-mr-3 ml-24 xl:ml-0 sm:-mr-6" // Adjusted image height/width
-                width={120}
-                height={120}
+                width={50}
+                height={50}
                 alt="PharmVerify Logo"
-              /> */}
+              />
               <h2 className="text-2xl font-bold tracking-tight text-white sm:text-2xl ">
                 <a
                   href="https://pharmverify.vercel.app/"
                   className="hidden xl:block"
-                >
-                  BankAIAgent
-                </a>
+                ></a>
               </h2>
             </div>
 

@@ -4,37 +4,32 @@ const people = [
   {
     name: "Chieloka Madubugwu",
     role: "Chief Technology Officer",
-    description: "AI & Security Architect with 10+ years in fintech systems",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    // description: "AI & Security Architect with 10+ years in fintech systems",
+    imageUrl: "./img/chielokaHeadshot.jpg",
   },
   {
     name: "Kennedy Okpala",
     role: "Software Engineer - C#",
-    description: "Former banking security specialist turned entrepreneur",
-    imageUrl:
-      "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    // description: "Former banking security specialist turned entrepreneur",
+    imageUrl: "./img/kenedyHeadshot.JPG",
   },
   {
     name: "Ayoade Oluwasegun",
     role: "Software Engineer - C#",
-    description: "Leads our human-in-the-loop review team",
-    imageUrl:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    // description: "Leads our human-in-the-loop review team",
+    imageUrl: "./img/segunHeadshot.jpg",
   },
   {
     name: "Opeyemi Adeyeye",
     role: "Product Designer",
-    description: "Develops our behavioral pattern recognition algorithms",
-    imageUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    // description: "Develops our behavioral pattern recognition algorithms",
+    imageUrl: "./img/opeyemiHeadshot.jpg",
   },
   {
     name: "Arafat Akata",
     role: "Software Engineer - Frontend",
-    description: "Connects banks with our security solutions",
-    imageUrl:
-      "https://images.unsplash.com/photo-1619895862022-09114b41f16f?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    // description: "Connects banks with our security solutions",
+    imageUrl: "./img/arafatHeadshot.jpg",
   },
 ];
 

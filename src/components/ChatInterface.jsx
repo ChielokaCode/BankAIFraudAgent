@@ -8,12 +8,26 @@ import {
   FiCreditCard,
   FiShield,
 } from "react-icons/fi";
+import axios from "axios";
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [activeForm, setActiveForm] = useState(null);
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [balance, setBalance] = useState(0);
+
+  const [fromUser, setFromUser] = useState("");
+  const [toUser, setToUser] = useState("");
+  const [amount, setAmount] = useState(0);
+
+  const [response, setResponse] = useState("");
+
   const messagesEndRef = useRef(null);
 
   const bankingExamples = [
@@ -31,6 +45,62 @@ const ChatInterface = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, activeForm]);
+
+  const handleFinalSendMessage = async (message) => {
+    const messageText = typeof message === "string" ? message : inputValue;
+    if (!messageText.trim()) return;
+
+    //user message
+    const userMessage = {
+      id: Date.now(),
+      text: messageText,
+      sender: "user",
+      timestamp: new Date().toLocaleTimeString(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/chat",
+        {
+          message: messageText,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const apiResponse = response.data;
+      console.log(apiResponse.message);
+      setResponse(apiResponse.message);
+
+      // Process the API response
+      const botResponse = {
+        text: apiResponse.message,
+        actions: [],
+        fraudAlert: null,
+      };
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: botResponse.text,
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+          actions: botResponse.actions,
+          fraudAlert: botResponse.fraudAlert,
+        },
+      ]);
+
+      // return botResponse; // Return the response if needed
+    } catch (err) {
+      console.error("Error sending message:", err);
+      throw err;
+    }
+  };
 
   const handleSendMessage = async (message) => {
     const messageText = typeof message === "string" ? message : inputValue;
@@ -50,6 +120,18 @@ const ChatInterface = () => {
     // Simulate API call to backend
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await axios.post(
+        "http://localhost:5000/chat",
+        {
+          message: messageText,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const apiResponse = response.data;
 
       let botResponse = {};
 
@@ -58,28 +140,14 @@ const ChatInterface = () => {
         messageText.toLowerCase().includes("account")
       ) {
         console.log(messageText);
-        botResponse = {
-          text: "I can help you create a new account. For security, we'll need to verify your identity first.",
-          actions: [
-            { label: "Start KYC Verification", type: "kyc" },
-            { label: "Learn about security", type: "info" },
-          ],
-        };
         setActiveForm("accountCreation");
       } else if (messageText.toLowerCase().includes("transactions")) {
         botResponse = {
-          text: "Recent transactions:\n\n1. Jul 15: -$250.00 (Transfer to John D)\n2. Jul 14: +$1,200.00 (Salary Deposit)\n3. Jul 12: -$85.50 (Online Purchase)",
+          text: "Recent transactions:\n\n1. Jul 15: -₦250.00 (Transfer to John D)\n2. Jul 14: +₦1,200.00 (Salary Deposit)\n3. Jul 12: -₦85.50 (Online Purchase)",
           fraudAlert:
             "⚠️ Unusual activity detected: Multiple login attempts from new device",
         };
       } else if (messageText.toLowerCase().includes("transfer")) {
-        botResponse = {
-          text: "Let's set up your transfer. First, let's verify it's really you.",
-          actions: [
-            { label: "Biometric Verification", type: "biometric" },
-            { label: "Security Questions", type: "questions" },
-          ],
-        };
         setActiveForm("moneyTransfer");
       } else if (
         messageText.toLowerCase().includes("fraud") ||
@@ -93,20 +161,20 @@ const ChatInterface = () => {
           ],
         };
       } else if (messageText.toLowerCase().includes("balance")) {
+        //userMessage
+        const userMessage = {
+          id: Date.now(),
+          text: messageText,
+          sender: "user",
+          timestamp: new Date().toLocaleTimeString(),
+        };
+        setMessages((prev) => [...prev, userMessage]);
         console.log(messageText);
         botResponse = {
-          text: "Here are your current balances:\n\n- Main Account: $5,245.50\n- Savings Account: $12,000.00\n- Investment Account: $8,750.30",
+          text: apiResponse.message,
           actions: [
             { label: "View transaction history", type: "transactions" },
             { label: "Transfer funds", type: "transfer" },
-          ],
-        };
-      } else {
-        botResponse = {
-          text: "I'm your SentinelAI banking assistant. I can help with accounts, transfers, fraud detection, and security.",
-          actions: [
-            { label: "Account Services", type: "accounts" },
-            { label: "Security Center", type: "security" },
           ],
         };
       }
@@ -150,6 +218,9 @@ const ChatInterface = () => {
       case "transfer":
         setActiveForm("moneyTransfer");
         break;
+      case "anyMessage":
+        setActiveForm("anyMessage");
+        break;
       case "freeze":
         handleSendMessage("Freeze my account due to suspicious activity");
         break;
@@ -173,29 +244,56 @@ const ChatInterface = () => {
                 </label>
                 <input
                   type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Government ID
+                  Email
                 </label>
                 <input
-                  type="file"
-                  className="mt-1 block w-full text-sm text-gray-500"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Selfie Verification
+                  Address
                 </label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  capture="user"
-                  className="mt-1 block w-full text-sm text-gray-500"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone number
+                </label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Balance
+                </label>
+                <input
+                  type="text"
+                  value={balance}
+                  onChange={(e) => setBalance(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
+              </div>
+
               <div className="flex space-x-3 pt-2">
                 <button
                   onClick={() => setActiveForm(null)}
@@ -205,12 +303,14 @@ const ChatInterface = () => {
                 </button>
                 <button
                   onClick={() => {
-                    handleSendMessage("I've submitted my KYC documents");
+                    handleFinalSendMessage(
+                      `Create an account with following details: Name: ${fullName}, Address: ${address}, Phone: ${phone}, Email: ${email}, Balance: ${balance}`
+                    );
                     setActiveForm(null);
                   }}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium"
                 >
-                  Submit for Verification
+                  Open Account
                 </button>
               </div>
             </div>
@@ -227,10 +327,13 @@ const ChatInterface = () => {
                 <label className="block text-sm font-medium text-gray-700">
                   From Account
                 </label>
-                <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                  <option>Main Account (•••3456)</option>
-                  <option>Savings Account (•••7821)</option>
-                </select>
+                <input
+                  type="text"
+                  value={fromUser}
+                  onChange={(e) => setFromUser(e.target.value)}
+                  placeholder="Account number or email"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -238,6 +341,8 @@ const ChatInterface = () => {
                 </label>
                 <input
                   type="text"
+                  value={toUser}
+                  onChange={(e) => setToUser(e.target.value)}
                   placeholder="Account number or email"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                 />
@@ -248,10 +353,12 @@ const ChatInterface = () => {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">$</span>
+                    <span className="text-gray-500 sm:text-sm">₦</span>
                   </div>
                   <input
                     type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
                     className="focus:ring-green-500 focus:border-green-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                     placeholder="0.00"
                   />
@@ -271,7 +378,9 @@ const ChatInterface = () => {
                   </button>
                   <button
                     onClick={() => {
-                      handleSendMessage("I've initiated a money transfer");
+                      handleFinalSendMessage(
+                        `transfer from ${fromUser} to ${toUser} the amount of ${amount}`
+                      );
                       setActiveForm(null);
                     }}
                     className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium"
@@ -280,6 +389,21 @@ const ChatInterface = () => {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        );
+      case "anyMessage":
+        return (
+          <div>
+            <strong>AI Response:</strong>
+            <div className="whitespace-pre-line">
+              {response
+                .replace(/###\s*(.+)/g, "\n\n**$1**") // Convert ### headings to bold on a new line
+                .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") // Convert **bold** to HTML <strong>
+                .split("\n")
+                .map((line, index) => (
+                  <p key={index} dangerouslySetInnerHTML={{ __html: line }} />
+                ))}
             </div>
           </div>
         );
@@ -436,6 +560,7 @@ const ChatInterface = () => {
           />
           <button
             type="submit"
+            onClick={() => handleFinalSendMessage(inputValue)}
             className="px-4 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 flex items-center justify-center"
             disabled={!inputValue.trim() || isTyping}
           >
