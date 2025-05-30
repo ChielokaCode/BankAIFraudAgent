@@ -320,7 +320,7 @@ const ChatInterface = () => {
         return (
           <div className="bg-green-50 p-4 rounded-lg border border-green-100 mt-4">
             <h3 className="font-semibold text-green-800 mb-3 flex items-center">
-              <FiDollarSign className="mr-2" /> Money Transfer
+              <div className="mr-2" />₦ Money Transfer
             </h3>
             <div className="space-y-3">
               <div>
@@ -385,7 +385,7 @@ const ChatInterface = () => {
                     }}
                     className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium"
                   >
-                    Verify & Send
+                    Transfer
                   </button>
                 </div>
               </div>

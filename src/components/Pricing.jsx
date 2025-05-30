@@ -144,7 +144,7 @@ const Pricing = () => {
               ))}
             </ul>
             <a
-              href="register"
+              href="#"
               passHref
               aria-describedby={tier.id}
               className={classNames(

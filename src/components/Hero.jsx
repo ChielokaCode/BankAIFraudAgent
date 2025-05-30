@@ -25,7 +25,7 @@ const Hero = () => {
             </div>
           </div>
           <h1 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl md:text-left">
-            Stop Fraud Before It Happens with SentinelAI!
+            Prevent Fraud Before It Happens with SentinelAI!
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600 md:text-left">
             Protect your financial transactions with our AI-driven fraud
