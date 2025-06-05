@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://sentinel-ai-aqbrebe4adhah9g4.westus-01.azurewebsites.net",
+  baseURL: "http://localhost:5000/",
   headers: {
     "Content-Type": "application/json",
   },

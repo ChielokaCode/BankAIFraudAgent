@@ -61,7 +61,7 @@ const ChatInterface = () => {
 
     try {
       const response = await axios.post(
-        "https://sentinel-ai-aqbrebe4adhah9g4.westus-01.azurewebsites.net/chat",
+        "http://localhost:5000/chat",
         {
           message: messageText,
         },
@@ -121,7 +121,7 @@ const ChatInterface = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const response = await axios.post(
-        "https://sentinel-ai-aqbrebe4adhah9g4.westus-01.azurewebsites.net/chat",
+        "http://localhost:5000/chat",
         {
           message: messageText,
         },
